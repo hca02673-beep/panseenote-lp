@@ -209,7 +209,7 @@ a {
 .hero-woman-wrap {
   position: absolute;
   right: -22px;
-  bottom: 168px;
+  bottom: 110px;
   width: var(--hero-woman-width);
   margin: 0;
 }

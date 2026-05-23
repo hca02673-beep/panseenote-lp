@@ -157,7 +157,7 @@ a {
 .hero-keywords {
   margin: 0;
   color: var(--hero-accent-brown);
-  font-size: var(--hero-keyword-size);
+  font-size: calc(var(--hero-keyword-size) * 0.9);
   font-weight: 700;
   line-height: 1.26;
   white-space: nowrap;
@@ -167,7 +167,7 @@ a {
 .hero-sub-copy {
   margin: 0;
   color: var(--hero-dark-green);
-  font-size: var(--hero-copy-size);
+  font-size: calc(var(--hero-copy-size) * 1.1);
   font-weight: 700;
   line-height: 1.32;
 }
@@ -175,6 +175,10 @@ a {
 .hero-sub-copy-line,
 .hero-value-copy-line {
   display: block;
+}
+
+.hero-sub-copy-line:last-child {
+  padding-left: 4ch;
 }
 
 /* Value proposition copy */
@@ -187,17 +191,25 @@ a {
   letter-spacing: 0.01em;
 }
 
+.hero-value-copy-line:nth-child(2) {
+  padding-left: 1ch;
+}
+
+.hero-value-copy-line:nth-child(3) {
+  padding-left: 2ch;
+}
+
 /* Right visual area */
 .hero-visual-column {
   position: relative;
-  min-height: 650px;
+  min-height: 540px;
 }
 
 /* Woman image position and size */
 .hero-woman-wrap {
   position: absolute;
   right: -22px;
-  bottom: 56px;
+  bottom: 168px;
   width: var(--hero-woman-width);
   margin: 0;
 }
@@ -211,7 +223,8 @@ a {
 .hero-phone-area {
   position: absolute;
   left: 0;
-  bottom: 0;
+  top: -30px;
+  bottom: auto;
   z-index: 3;
   width: min(100%, 420px);
 }
@@ -251,7 +264,7 @@ a {
 /* Free badge bubble */
 .hero-free-bubble {
   position: absolute;
-  top: 74px;
+  top: -30px;
   right: 22px;
   z-index: 4;
   padding: 16px 26px;
@@ -262,6 +275,7 @@ a {
   font-weight: 800;
   line-height: 1;
   box-shadow: 0 14px 24px rgba(66, 168, 155, 0.24);
+  transform: translateY(-100%);
 }
 
 .hero-free-bubble::after {
@@ -281,7 +295,7 @@ a {
   grid-template-columns: minmax(0, 1fr) minmax(440px, 520px);
   gap: 28px;
   align-items: end;
-  margin-top: 12px;
+  margin-top: -18px;
 }
 
 /* CTA button area */
@@ -661,6 +675,20 @@ a {
     white-space: normal;
   }
 
+  .hero-keywords {
+    font-size: var(--hero-keyword-size);
+  }
+
+  .hero-sub-copy {
+    font-size: var(--hero-copy-size);
+  }
+
+  .hero-sub-copy-line:last-child,
+  .hero-value-copy-line:nth-child(2),
+  .hero-value-copy-line:nth-child(3) {
+    padding-left: 0;
+  }
+
   .hero-visual-column {
     min-height: auto;
     display: grid;
@@ -680,6 +708,7 @@ a {
     justify-self: end;
     top: 0;
     right: 0;
+    transform: none;
   }
 
   .hero-phone-area {

@@ -1,10 +1,35 @@
 const TRIAL_URL = "https://hca02673-beep.github.io/panseenote/";
+const HERO_DEMO_URL = "https://hca02673-beep.github.io/panseenote/?demo=1";
 const LS_NORMAL_BASIC_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/a0fe7a7d-a1e2-435c-864f-f85d38f95ebb?enabled=1440487%2C1440496%2C1440498";
 const LS_NORMAL_STANDARD_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/fa4935c5-1d3d-4a0b-9285-0d147777a18f?enabled=1440487%2C1440496%2C1440498";
 const LS_NORMAL_PREMIUM_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/f6372e89-3e57-429e-b57a-eb1fe9804d0b?enabled=1440487%2C1440496%2C1440498";
 const LS_BASIC_UPGRADE_STANDARD_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/8b135ea9-6a77-4552-97e4-2361a55007e4?enabled=1440501%2C1691433";
 const LS_BASIC_UPGRADE_PREMIUM_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/93753951-0b84-4ff9-8f7e-9061dc472cfb?enabled=1440501%2C1691433";
 const LS_STANDARD_UPGRADE_PREMIUM_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/69fa8894-4b2c-4d0e-9480-da06b81c7341?enabled=1691436";
+
+/* Hero slider: image list is editable here */
+const HERO_SLIDE_IMAGES = [
+  {
+    src: "assets/スマホヒーロ（ママ）.png",
+    alt: "パンセノートの検索画面例 ママ",
+  },
+  {
+    src: "assets/スマホヒーロ（イオン）.png",
+    alt: "パンセノートの検索画面例 イオン",
+  },
+  {
+    src: "assets/スマホヒーロ（あんかけ）.png",
+    alt: "パンセノートの検索画面例 あんかけ",
+  },
+  {
+    src: "assets/スマホヒーロ（パナ）.png",
+    alt: "パンセノートの検索画面例 パナ",
+  },
+];
+const HERO_SLIDE_INTERVAL_MS = 3500;
+const HERO_SLIDE_FADE_MS = 600;
+const HERO_SLIDE_INITIAL_INDEX = 0;
+const HERO_SLIDE_AUTOPLAY = true;
 
 const BASE_FEATURES = {
   trial: [
@@ -33,6 +58,14 @@ const BASE_FEATURES = {
   ],
 };
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function getModeFromLocation() {
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode");
@@ -48,6 +81,58 @@ function getModeFromLocation() {
     return "upgrade-standard";
   }
   return "normal";
+}
+
+function buildHeroSlidesHtml() {
+  return HERO_SLIDE_IMAGES.map(function (image, index) {
+    const classes = ["hero-phone-slide"];
+    if (index === HERO_SLIDE_INITIAL_INDEX) {
+      classes.push("is-active");
+    }
+    return (
+      '<img class="' +
+      classes.join(" ") +
+      '" src="' +
+      escapeHtml(image.src) +
+      '" alt="' +
+      escapeHtml(image.alt) +
+      '" loading="' +
+      (index === HERO_SLIDE_INITIAL_INDEX ? "eager" : "lazy") +
+      '">'
+    );
+  }).join("");
+}
+
+function initHeroSlider() {
+  const sliderRoot = document.querySelector("[data-hero-slider]");
+  const slidesRoot = document.getElementById("hero-phone-slides");
+  const heroPrimaryButton = document.querySelector(".hero-primary-button");
+  const heroDemoButton = document.querySelector(".hero-demo-button");
+  if (!sliderRoot || !slidesRoot) return;
+
+  sliderRoot.style.setProperty("--hero-slider-fade-ms", HERO_SLIDE_FADE_MS + "ms");
+  slidesRoot.innerHTML = buildHeroSlidesHtml();
+
+  if (heroPrimaryButton) {
+    heroPrimaryButton.setAttribute("href", TRIAL_URL);
+  }
+  if (heroDemoButton) {
+    heroDemoButton.setAttribute("href", HERO_DEMO_URL);
+  }
+
+  const slides = Array.from(slidesRoot.querySelectorAll(".hero-phone-slide"));
+  if (!HERO_SLIDE_AUTOPLAY || slides.length <= 1) return;
+
+  let currentIndex = Math.min(
+    Math.max(HERO_SLIDE_INITIAL_INDEX, 0),
+    slides.length - 1
+  );
+
+  window.setInterval(function () {
+    slides[currentIndex].classList.remove("is-active");
+    currentIndex = (currentIndex + 1) % slides.length;
+    slides[currentIndex].classList.add("is-active");
+  }, HERO_SLIDE_INTERVAL_MS);
 }
 
 function getPricingState(mode) {
@@ -278,51 +363,80 @@ function buildPlanNameHtml(name) {
 }
 
 function renderPlans(plans) {
-  return plans.map(function (plan) {
-    const cardClasses = [
-      "plan-card",
-      plan.featured ? "is-featured" : "",
-      plan.disabled ? "is-disabled" : "",
-    ].filter(Boolean).join(" ");
+  return plans
+    .map(function (plan) {
+      const cardClasses = [
+        "plan-card",
+        plan.featured ? "is-featured" : "",
+        plan.disabled ? "is-disabled" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
 
-    const badgeHtml = plan.badge
-      ? '<div class="plan-badge">' + plan.badge + "</div>"
-      : "";
+      const badgeHtml = plan.badge
+        ? '<div class="plan-badge">' + plan.badge + "</div>"
+        : "";
 
-    const oldPriceHtml = plan.oldPrice
-      ? '<p class="plan-price-old">' + plan.oldPrice + "</p>"
-      : "";
+      const oldPriceHtml = plan.oldPrice
+        ? '<p class="plan-price-old">' + plan.oldPrice + "</p>"
+        : "";
 
-    const featureHtml = plan.features.map(function (feature) {
-      return "<li>" + feature + "</li>";
-    }).join("");
+      const featureHtml = plan.features
+        .map(function (feature) {
+          return "<li>" + feature + "</li>";
+        })
+        .join("");
 
-    const buttonClasses = [
-      "plan-btn",
-      plan.trial ? "is-trial" : "",
-    ].filter(Boolean).join(" ");
+      const buttonClasses = ["plan-btn", plan.trial ? "is-trial" : ""]
+        .filter(Boolean)
+        .join(" ");
 
-    const buttonHtml = plan.disabled
-      ? '<button class="' + buttonClasses + '" type="button" disabled aria-disabled="true">' + plan.buttonLabel + "</button>"
-      : '<a class="' + buttonClasses + '" href="' + plan.href + '">' + plan.buttonLabel + "</a>";
+      const buttonHtml = plan.disabled
+        ? '<button class="' +
+          buttonClasses +
+          '" type="button" disabled aria-disabled="true">' +
+          plan.buttonLabel +
+          "</button>"
+        : '<a class="' +
+          buttonClasses +
+          '" href="' +
+          plan.href +
+          '">' +
+          plan.buttonLabel +
+          "</a>";
 
-    return (
-      '<article class="' + cardClasses + '">' +
+      return (
+        '<article class="' +
+        cardClasses +
+        '">' +
         badgeHtml +
-        '<h2 class="plan-name">' + buildPlanNameHtml(plan.name) + "</h2>" +
-        '<p class="plan-limit">' + plan.limit + "</p>" +
+        '<h3 class="plan-name">' +
+        buildPlanNameHtml(plan.name) +
+        "</h3>" +
+        '<p class="plan-limit">' +
+        plan.limit +
+        "</p>" +
         '<div class="plan-price-wrap">' +
-          '<p class="plan-price">' + plan.price + '<span class="plan-price-unit">' + plan.unit + "</span></p>" +
-          oldPriceHtml +
-          '<p class="plan-price-note">' + plan.note + "</p>" +
+        '<p class="plan-price">' +
+        plan.price +
+        '<span class="plan-price-unit">' +
+        plan.unit +
+        "</span></p>" +
+        oldPriceHtml +
+        '<p class="plan-price-note">' +
+        plan.note +
+        "</p>" +
         "</div>" +
-        '<ul class="plan-features">' + featureHtml + "</ul>" +
+        '<ul class="plan-features">' +
+        featureHtml +
+        "</ul>" +
         '<div class="plan-action">' +
-          buttonHtml +
+        buttonHtml +
         "</div>" +
-      "</article>"
-    );
-  }).join("");
+        "</article>"
+      );
+    })
+    .join("");
 }
 
 function initPricing() {
@@ -337,4 +451,7 @@ function initPricing() {
   gridEl.innerHTML = renderPlans(state.plans);
 }
 
-document.addEventListener("DOMContentLoaded", initPricing);
+document.addEventListener("DOMContentLoaded", function () {
+  initHeroSlider();
+  initPricing();
+});

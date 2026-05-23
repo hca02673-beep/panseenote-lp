@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>パンセノート LP | プラン・料金</title>
-  <meta name="description" content="パンセノートLPのプラン・料金。通常購入、ベーシックからのアップグレード、スタンダードからのアップグレードを切り替えて表示します。">
+  <title>パンセノート LP | ヒーロー・プラン料金</title>
+  <meta name="description" content="パンセノートLP。声で探せる音声検索体験と、プラン・料金をスマホ優先で紹介します。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -12,12 +12,92 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="pricing-page">
+  <main class="landing-page">
+    <section class="hero" id="top">
+      <div class="hero-shell">
+        <div class="hero-top-banner">
+          <p class="hero-top-banner-text">声で探せる―音声検索新体験</p>
+        </div>
+
+        <div class="hero-layout">
+          <div class="hero-copy-column">
+            <img
+              src="assets/パンセノートシンボル透過.png"
+              alt="パンセノート"
+              class="hero-logo"
+            >
+
+            <div class="hero-copy-stack">
+              <p class="hero-main-copy">どこかにメモした</p>
+              <p class="hero-keywords">「ママ」、「エアコン」、「銀行」</p>
+              <p class="hero-sub-copy">短いキーワードですぐ見つかる</p>
+              <p class="hero-value-copy">パンセノートで貴方の生活満足度を高めてみませんか</p>
+            </div>
+          </div>
+
+          <div class="hero-visual-column">
+            <div class="hero-phone-area">
+              <div class="hero-free-bubble" aria-label="無料">無料！</div>
+              <div class="hero-phone-slider" data-hero-slider>
+                <div class="hero-phone-frame">
+                  <div class="hero-phone-slides" id="hero-phone-slides" aria-live="polite"></div>
+                </div>
+              </div>
+            </div>
+
+            <figure class="hero-woman-wrap">
+              <img
+                src="assets/若い女性の写真（ヒーローページ用）.png"
+                alt="スマートフォンを見る女性"
+                class="hero-woman-image"
+              >
+            </figure>
+          </div>
+        </div>
+
+        <div class="hero-bottom-row">
+          <div class="hero-cta-area">
+            <a class="hero-primary-button" href="https://hca02673-beep.github.io/panseenote/">
+              <span class="hero-button-icon" aria-hidden="true">▶</span>
+              <span class="hero-button-label">
+                <span class="hero-button-title">無料で試す</span>
+                <span class="hero-button-sub">（インストール不要）</span>
+              </span>
+            </a>
+            <a class="hero-demo-button" href="https://hca02673-beep.github.io/panseenote/?demo=1">
+              <span class="hero-button-icon" aria-hidden="true">▶</span>
+              <span class="hero-button-label">
+                <span class="hero-button-title">サンプル入り</span>
+                <span class="hero-button-sub">体験版</span>
+              </span>
+            </a>
+          </div>
+
+          <aside class="hero-side-panel">
+            <nav class="hero-nav-buttons" aria-label="ヒーローナビゲーション">
+              <a class="hero-nav-button" href="#use-cases">使い道</a>
+              <a class="hero-nav-button" href="#how-to">使い方</a>
+              <a class="hero-nav-button" href="#pricing">プラン</a>
+            </nav>
+
+            <ul class="hero-note">
+              <li>iPhone、Android、Mac、Win</li>
+              <li>ブラウザ上で動きます</li>
+              <li>画面表示はイメージです</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <div id="use-cases" class="hero-anchor-target" aria-hidden="true"></div>
+    <div id="how-to" class="hero-anchor-target" aria-hidden="true"></div>
+
     <section class="pricing-section" id="pricing">
       <div class="pricing-shell">
         <header class="pricing-header">
           <p class="pricing-kicker">Pricing</p>
-          <h1 id="pricing-title" class="pricing-title">プラン・料金</h1>
+          <h2 id="pricing-title" class="pricing-title">プラン・料金</h2>
           <p id="pricing-lead" class="pricing-lead">試用版は登録件数100件まで完全無料。有料プランはすべて買い切り型です。</p>
         </header>
         <div id="pricing-grid" class="pricing-grid" aria-live="polite"></div>

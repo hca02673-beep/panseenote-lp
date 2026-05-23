@@ -26,7 +26,7 @@ const HERO_SLIDE_IMAGES = [
     alt: "パンセノートの検索画面例 パナ",
   },
 ];
-const HERO_SLIDE_INTERVAL_MS = 3500;
+const HERO_SLIDE_INTERVAL_MS = 5000;
 const HERO_SLIDE_FADE_MS = 600;
 const HERO_SLIDE_INITIAL_INDEX = 0;
 const HERO_SLIDE_AUTOPLAY = true;

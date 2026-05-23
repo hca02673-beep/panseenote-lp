@@ -1,7 +1,7 @@
-const TRIAL_URL = "https://example.com/panseenote/trial";
-const LS_NORMAL_CHECKOUT_URL = "https://example.com/panseenote/checkout/standard";
-const LS_BASIC_UPGRADE_CHECKOUT_URL = "https://example.com/panseenote/checkout/upgrade/basic-to-standard";
-const LS_STANDARD_UPGRADE_CHECKOUT_URL = "https://example.com/panseenote/checkout/upgrade/standard-to-premium";
+const TRIAL_URL = "https://hca02673-beep.github.io/panseenote/";
+const LS_NORMAL_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/fa4935c5-1d3d-4a0b-9285-0d147777a18f?enabled=1440487%2C1440496%2C1440498";
+const LS_BASIC_UPGRADE_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/8b135ea9-6a77-4552-97e4-2361a55007e4?enabled=1440501%2C1691433";
+const LS_STANDARD_UPGRADE_CHECKOUT_URL = "https://pnote-test-store.lemonsqueezy.com/checkout/buy/69fa8894-4b2c-4d0e-9480-da06b81c7341?enabled=1691436";
 
 const BASE_FEATURES = {
   trial: [
@@ -29,13 +29,6 @@ const BASE_FEATURES = {
     "購入後メールでお届け",
   ],
 };
-
-function buildCheckoutUrl(baseUrl, planCode) {
-  const safeBase = String(baseUrl || "#");
-  const safePlan = String(planCode || "").trim();
-  if (!safePlan || safeBase === "#") return safeBase;
-  return safeBase + (safeBase.indexOf("?") >= 0 ? "&" : "?") + "plan=" + encodeURIComponent(safePlan);
-}
 
 function getModeFromLocation() {
   const params = new URLSearchParams(window.location.search);
@@ -88,7 +81,7 @@ function getPricingState(mode) {
           note: "税込",
           features: BASE_FEATURES.paid10000,
           buttonLabel: "購入する",
-          href: buildCheckoutUrl(LS_BASIC_UPGRADE_CHECKOUT_URL, "standard"),
+          href: LS_BASIC_UPGRADE_CHECKOUT_URL,
           featured: true,
           badge: "おすすめ",
         },
@@ -101,7 +94,7 @@ function getPricingState(mode) {
           note: "税込",
           features: BASE_FEATURES.paid30000,
           buttonLabel: "購入する",
-          href: buildCheckoutUrl(LS_BASIC_UPGRADE_CHECKOUT_URL, "premium"),
+          href: LS_BASIC_UPGRADE_CHECKOUT_URL,
         },
       ],
     };
@@ -131,7 +124,7 @@ function getPricingState(mode) {
           note: "税込",
           features: BASE_FEATURES.paid200,
           buttonLabel: "購入する",
-          href: buildCheckoutUrl(LS_NORMAL_CHECKOUT_URL, "basic"),
+          href: LS_NORMAL_CHECKOUT_URL,
           disabled: true,
         },
         {
@@ -142,7 +135,7 @@ function getPricingState(mode) {
           note: "税込",
           features: BASE_FEATURES.paid10000,
           buttonLabel: "購入する",
-          href: buildCheckoutUrl(LS_NORMAL_CHECKOUT_URL, "standard"),
+          href: LS_NORMAL_CHECKOUT_URL,
           disabled: true,
           featured: true,
           badge: "おすすめ",
@@ -156,7 +149,7 @@ function getPricingState(mode) {
           note: "税込",
           features: BASE_FEATURES.paid30000,
           buttonLabel: "購入する",
-          href: buildCheckoutUrl(LS_STANDARD_UPGRADE_CHECKOUT_URL, "premium"),
+          href: LS_STANDARD_UPGRADE_CHECKOUT_URL,
         },
       ],
     };
@@ -185,7 +178,7 @@ function getPricingState(mode) {
         note: "税込",
         features: BASE_FEATURES.paid200,
         buttonLabel: "購入する",
-        href: buildCheckoutUrl(LS_NORMAL_CHECKOUT_URL, "basic"),
+        href: LS_NORMAL_CHECKOUT_URL,
       },
       {
         name: "スタンダード",
@@ -195,7 +188,7 @@ function getPricingState(mode) {
         note: "税込",
         features: BASE_FEATURES.paid10000,
         buttonLabel: "購入する",
-        href: buildCheckoutUrl(LS_NORMAL_CHECKOUT_URL, "standard"),
+        href: LS_NORMAL_CHECKOUT_URL,
         featured: true,
         badge: "おすすめ",
       },
@@ -207,7 +200,7 @@ function getPricingState(mode) {
         note: "税込",
         features: BASE_FEATURES.paid30000,
         buttonLabel: "購入する",
-        href: buildCheckoutUrl(LS_NORMAL_CHECKOUT_URL, "premium"),
+        href: LS_NORMAL_CHECKOUT_URL,
       },
     ],
   };
@@ -238,9 +231,9 @@ function renderPlans(plans) {
       plan.trial ? "is-trial" : "",
     ].filter(Boolean).join(" ");
 
-    const buttonAttrs = plan.disabled
-      ? ' aria-disabled="true" tabindex="-1"'
-      : "";
+    const buttonHtml = plan.disabled
+      ? '<button class="' + buttonClasses + '" type="button" disabled aria-disabled="true">' + plan.buttonLabel + "</button>"
+      : '<a class="' + buttonClasses + '" href="' + plan.href + '">' + plan.buttonLabel + "</a>";
 
     return (
       '<article class="' + cardClasses + '">' +
@@ -254,7 +247,7 @@ function renderPlans(plans) {
         "</div>" +
         '<ul class="plan-features">' + featureHtml + "</ul>" +
         '<div class="plan-action">' +
-          '<a class="' + buttonClasses + '" href="' + plan.href + '"' + buttonAttrs + ">" + plan.buttonLabel + "</a>" +
+          buttonHtml +
         "</div>" +
       "</article>"
     );

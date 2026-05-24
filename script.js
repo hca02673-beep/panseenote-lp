@@ -135,6 +135,54 @@ function initHeroSlider() {
   }, HERO_SLIDE_INTERVAL_MS);
 }
 
+function measureChWidth(referenceEl, units) {
+  const probe = document.createElement("span");
+  const computedStyle = window.getComputedStyle(referenceEl);
+  probe.textContent = "";
+  probe.style.display = "inline-block";
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.pointerEvents = "none";
+  probe.style.whiteSpace = "pre";
+  probe.style.font = computedStyle.font;
+  probe.style.letterSpacing = computedStyle.letterSpacing;
+  probe.style.width = units + "ch";
+  document.body.appendChild(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  return width;
+}
+
+function initHeroPhonePosition() {
+  const desktopMedia = window.matchMedia("(min-width: 981px)");
+  const heroVisualColumn = document.querySelector(".hero-visual-column");
+  const heroPhoneArea = document.querySelector(".hero-phone-area");
+  const valueAnchor = document.querySelector(".hero-value-copy-line:nth-child(2)");
+
+  if (!heroVisualColumn || !heroPhoneArea || !valueAnchor) return;
+
+  function updatePhonePosition() {
+    if (!desktopMedia.matches) {
+      heroVisualColumn.style.removeProperty("--hero-phone-left");
+      return;
+    }
+
+    const anchorRect = valueAnchor.getBoundingClientRect();
+    const visualRect = heroVisualColumn.getBoundingClientRect();
+    const gapPx = measureChWidth(valueAnchor, 1.5);
+    const leftPx = anchorRect.right - visualRect.left + gapPx;
+
+    heroVisualColumn.style.setProperty("--hero-phone-left", leftPx + "px");
+  }
+
+  updatePhonePosition();
+  window.addEventListener("resize", updatePhonePosition);
+
+  if (document.fonts && typeof document.fonts.ready?.then === "function") {
+    document.fonts.ready.then(updatePhonePosition);
+  }
+}
+
 function getPricingState(mode) {
   if (mode === "upgrade-trial") {
     return {
@@ -453,5 +501,6 @@ function initPricing() {
 
 document.addEventListener("DOMContentLoaded", function () {
   initHeroSlider();
+  initHeroPhonePosition();
   initPricing();
 });

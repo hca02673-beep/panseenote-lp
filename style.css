@@ -748,6 +748,14 @@ a {
   line-height: 1.8;
 }
 
+.pricing-subnote {
+  margin: 14px 0 0;
+  color: var(--text-soft);
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

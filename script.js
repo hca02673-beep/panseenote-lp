@@ -366,6 +366,7 @@ function getPricingState(mode) {
   return {
     title: "プラン・料金",
     lead: "試用版は登録件数100件まで完全無料。有料プランは全て買い切り型で、アカウント登録も不要です。",
+    subNote: "・有料プランをご利用中のお客様のプランアップについては、別コースが用意されています。アプリ内のプランアップボタンからお申し込みください。",
     plans: [
       {
         name: "試用版（トライアル）",
@@ -560,12 +561,22 @@ function renderPlans(plans) {
 function initPricing() {
   const titleEl = document.getElementById("pricing-title");
   const leadEl = document.getElementById("pricing-lead");
+  const subNoteEl = document.getElementById("pricing-subnote");
   const gridEl = document.getElementById("pricing-grid");
   if (!titleEl || !leadEl || !gridEl) return;
 
   const state = getPricingState(getModeFromLocation());
   titleEl.textContent = state.title;
   leadEl.textContent = state.lead;
+  if (subNoteEl) {
+    if (state.subNote) {
+      subNoteEl.textContent = state.subNote;
+      subNoteEl.removeAttribute("hidden");
+    } else {
+      subNoteEl.textContent = "";
+      subNoteEl.setAttribute("hidden", "");
+    }
+  }
   gridEl.innerHTML = renderPlans(state.plans);
 }
 
